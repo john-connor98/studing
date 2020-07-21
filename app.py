@@ -31,8 +31,8 @@ def webhook():
 #     return preprocessed_review
 
 def manage_query(req):
-    # result = req.get("queryResult")
-    # original_query = str(result.get("queryText"))
+    result = req.get("queryResult")
+    original_query = str(result.get("queryText"))
 
     # query = process_query(original_query)
     # query_transformed = model.transform(query)
@@ -56,7 +56,7 @@ def manage_query(req):
                 {
                   "text": {
                     "text": [
-                      "working fine"
+                      original_query
                     ]
                   }
                 }
