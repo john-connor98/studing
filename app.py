@@ -22,19 +22,19 @@ def webhook():
     return r
 
 # processing the query using regular expression before transformation
-# def process_query(query):
-#     preprocessed_review = []
-#     sentence = re.sub("\S*\d\S*", "", query).strip()
-#     sentence = re.sub("[^A-Za-z]+", ' ', sentence)
-#     sentence = ' '.join(e.lower() for e in sentence.split() if e.lower() not in stopwords.words('english'))
-#     preprocessed_review.append(sentence.strip())
-#     return preprocessed_review
+def process_query(query):
+    preprocessed_review = []
+    sentence = re.sub("\S*\d\S*", "", query).strip()
+    sentence = re.sub("[^A-Za-z]+", ' ', sentence)
+    sentence = ' '.join(e.lower() for e in sentence.split() if e.lower() not in stopwords.words('english'))
+    preprocessed_review.append(sentence.strip())
+    return preprocessed_review
 
 def manage_query(req):
     result = req.get("queryResult")
     original_query = str(result.get("queryText"))
 
-    # query = process_query(original_query)
+    query = process_query(original_query)
     # query_transformed = model.transform(query)
     # pairwise_dist = pairwise_distances(tfidf_features, query_transformed)
     # index = np.argsort(pairwise_dist.flatten())[0]
@@ -56,7 +56,7 @@ def manage_query(req):
                 {
                   "text": {
                     "text": [
-                      original_query
+                      query
                     ]
                   }
                 }
