@@ -1,11 +1,13 @@
 import numpy as np
 from flask import Flask, request, make_response, render_template
 from sklearn.metrics import pairwise_distances
-from nltk.corpus import stopwords
+import nltk
+nltk.download('stopwords')
 from flask_cors import cross_origin
 import re
 import json
 import pickle
+from nltk.corpus import stopwords
 
 app = Flask(__name__)
 model = pickle.load(open('tfidf_model.pkl', 'rb'))
