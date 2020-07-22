@@ -88,7 +88,7 @@ def manage_query(req):
                 {
                   "text": {
                     "text":  [
-                          str(index)
+                          ans
                     ]
                     
                   }
