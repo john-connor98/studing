@@ -3,6 +3,7 @@ from flask import Flask, request, make_response, render_template
 from sklearn.metrics import pairwise_distances
 from flask_cors import cross_origin
 from flask_sqlalchemy import SQLAlchemy
+import psycopg2
 # import numpy as np
 import numpy
 import pandas as pd
