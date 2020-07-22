@@ -1,17 +1,41 @@
-import numpy as np
 from flask import Flask, request, make_response, render_template
 from sklearn.metrics import pairwise_distances
-import nltk
-nltk.download('stopwords')
 from flask_cors import cross_origin
+from flask_sqlalchemy import SQLAlchemy
+import numpy as np
+import pandas as pd
 import re
 import json
 import pickle
+import nltk
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 
+
 app = Flask(__name__)
+app.debug = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ohtsqhdzdchoeo:142c974e0814071715177214be565c4dbb01a7c942e8c6f3e5da115d7d1284b3@ec2-3-91-139-25.compute-1.amazonaws.com:5432/d6n5re5cos3ja0'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+
+class studdata(db.Model):
+    __tablename__ = 'studydata'
+    Id = db.Column(db.Integer, primary_key=True)
+    Question = db.Column(db.Text(), nullable = False)
+    Answer = db.Column(db.Text(), nullable = False)
+
+    def __init__(self, Id, Question, Answer):
+        self.Id = Id
+        self.Question = Question
+        self.Answer = Answer
+
 model = pickle.load(open('tfidf_model.pkl', 'rb'))
-tfidf_features = pickle.load(open('model_features.pkl', 'rb'))
+quest_tuple_list = db.session.query(studdata.Question).all()
+quest_list = [value for value, in quest_tuple_list]
+quest_dataframe = pd.DataFrame(quest_list)
+tfidf_features = model.fit_transform(quest_dataframe)
+
 
 @app.route('/webhook', methods=['POST'])
 @cross_origin()
@@ -37,33 +61,36 @@ def manage_query(req):
     original_query = str(result.get("queryText"))
 
     query = process_query(original_query)
-    # query_transformed = model.transform(query)
-    # pairwise_dist = pairwise_distances(tfidf_features, query_transformed)
-    # index = np.argsort(pairwise_dist.flatten())[0]
+    query_transformed = model.transform(query)
+    pairwise_dist = pairwise_distances(tfidf_features, query_transformed)
+    index = np.argsort(pairwise_dist.flatten())[0]
+    if index==None:
+        ans = "sorry check the database "
+    else:
+        ans = str(db.session.query(studdata).get(index))
 
-
-    # return {
-    #           "fulfillmentMessages": [
-    #             {
-    #               "text": {
-    #                 "text": [
-    #                   str(index)
-    #                 ]
-    #               }
-    #             }
-    #           ]
-    #         }
     return {
               "fulfillmentMessages": [
                 {
                   "text": {
                     "text": [
-                      query
+                      ans
                     ]
                   }
                 }
               ]
             }
+    # return {
+    #           "fulfillmentMessages": [
+    #             {
+    #               "text": {
+    #                 "text": [
+    #                   query
+    #                 ]
+    #               }
+    #             }
+    #           ]
+    #         }
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run()
