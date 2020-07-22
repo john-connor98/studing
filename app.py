@@ -80,6 +80,9 @@ def manage_query(req):
         ans = "sorry check the database "
     else:
         ans = str(db.session.query(studdata).get(index))
+    
+    if ans == None:
+        ans = "there is some problem in answer"
 
     return {
               "fulfillmentMessages": [
