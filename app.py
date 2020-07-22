@@ -93,9 +93,8 @@ def manage_query(req):
               "fulfillmentMessages": [
                 {
                   "text": {
-                    "text": [
-                      checkans
-                    ]
+                    "text":  checkans
+                    
                   }
                 }
               ]
