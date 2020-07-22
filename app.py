@@ -3,8 +3,8 @@ from flask import Flask, request, make_response, render_template
 from sklearn.metrics import pairwise_distances
 from flask_cors import cross_origin
 from flask_sqlalchemy import SQLAlchemy
-import numpy as np
-# import numpy
+# import numpy as np
+import numpy
 import pandas as pd
 import re
 import json
@@ -25,8 +25,8 @@ def addapt_numpy_float64(numpy_float64):
     return AsIs(numpy_float64)
 def addapt_numpy_int64(numpy_int64):
     return AsIs(numpy_int64)
-register_adapter(np.float64, addapt_numpy_float64)
-register_adapter(np.int64, addapt_numpy_int64)
+register_adapter(numpy.float64, addapt_numpy_float64)
+register_adapter(numpy.int64, addapt_numpy_int64)
 
 class studdata(db.Model):
     __tablename__ = 'studydata'
@@ -74,7 +74,7 @@ def manage_query(req):
     query = process_query(original_query)
     query_transformed = model.transform(query)
     pairwise_dist = pairwise_distances(tfidf_features, query_transformed)
-    index = np.argsort(pairwise_dist.flatten())[0]
+    index = numpy.argsort(pairwise_dist.flatten())[0]
     if index==None:
         ans = "sorry check the database "
     else:
