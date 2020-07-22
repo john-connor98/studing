@@ -1,3 +1,4 @@
+from sklearn.feature_extraction.text import TfidfVectorizer
 from flask import Flask, request, make_response, render_template
 from sklearn.metrics import pairwise_distances
 from flask_cors import cross_origin
@@ -30,7 +31,8 @@ class studdata(db.Model):
         self.Question = Question
         self.Answer = Answer
 
-model = pickle.load(open('tfidf_model.pkl', 'rb'))
+# model = pickle.load(open('tfidf_model.pkl', 'rb'))
+model = TfidfVectorizer()
 quest_tuple_list = db.session.query(studdata.Question).all()
 quest_list = [value for value, in quest_tuple_list]
 quest_dataframe = pd.DataFrame(quest_list)
