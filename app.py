@@ -4,6 +4,7 @@ from sklearn.metrics import pairwise_distances
 from flask_cors import cross_origin
 from flask_sqlalchemy import SQLAlchemy
 import numpy as np
+import numpy
 import pandas as pd
 import re
 import json
