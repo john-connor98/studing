@@ -81,7 +81,7 @@ def manage_query(req):
     else:
         ans = str(db.session.query(studdata).get(index))
     
-    if ans == None:
+    if ans == "None":
         ans = "there is some problem in answer"
 
     return {
