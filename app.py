@@ -35,9 +35,9 @@ class studdata(db.Model):
 model = TfidfVectorizer()
 quest_tuple_list = db.session.query(studdata.Question).all()
 quest_list = [str(value) for value, in quest_tuple_list]
-subans = ' '.join(quest_list)
-# quest_dataframe = pd.DataFrame(quest_list)
-# tfidf_features = model.fit_transform(quest_dataframe)
+# subans = ' '.join(quest_list)
+quest_dataframe = pd.DataFrame(quest_list)
+tfidf_features = model.fit_transform(quest_dataframe.iloc[-1])
 
 
 @app.route('/webhook', methods=['POST'])
@@ -64,20 +64,20 @@ def manage_query(req):
     original_query = str(result.get("queryText"))
 
     query = process_query(original_query)
-#     query_transformed = model.transform(query)
-#     pairwise_dist = pairwise_distances(tfidf_features, query_transformed)
-#     index = np.argsort(pairwise_dist.flatten())[0]
-#     if index==None:
-#         ans = "sorry check the database "
-#     else:
-#         ans = str(db.session.query(studdata).get(index))
+    query_transformed = model.transform(query)
+    pairwise_dist = pairwise_distances(tfidf_features, query_transformed)
+    index = np.argsort(pairwise_dist.flatten())[0]
+    if index==None:
+        ans = "sorry check the database "
+    else:
+        ans = str(db.session.query(studdata).get(index))
 
     return {
               "fulfillmentMessages": [
                 {
                   "text": {
                     "text": [
-                      subans
+                      ans
                     ]
                   }
                 }
