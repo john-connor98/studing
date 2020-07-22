@@ -19,6 +19,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ohtsqhdzdchoeo:142c974e08140
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+from psycopg2.extensions import register_adapter, AsIs
+def addapt_numpy_float64(numpy_float64):
+    return AsIs(numpy_float64)
+def addapt_numpy_int64(numpy_int64):
+    return AsIs(numpy_int64)
+register_adapter(numpy.float64, addapt_numpy_float64)
+register_adapter(numpy.int64, addapt_numpy_int64)
 
 class studdata(db.Model):
     __tablename__ = 'studydata'
