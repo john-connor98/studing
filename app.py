@@ -48,7 +48,6 @@ quest_list = [str(value) for value, in quest_tuple_list]
 quest_dataframe = pd.DataFrame(quest_list)
 tfidf_features = model.fit_transform(quest_dataframe.iloc[-1])
 
-checkans = []######################################
 
 @app.route('/webhook', methods=['POST'])
 @cross_origin()
@@ -72,20 +71,15 @@ def process_query(query):
 def manage_query(req):
     result = req.get("queryResult")
     original_query = str(result.get("queryText"))
-    checkans.append(original_query) ################################
 
     query = process_query(original_query)
-    checkans.append(query) ################################
     query_transformed = model.transform(query)
-    checkans.append(query_transformed) ################################
     pairwise_dist = pairwise_distances(tfidf_features, query_transformed)
     index = numpy.argsort(pairwise_dist.flatten())[0]
-    checkans.append(index) ################################
     if index==None:
         ans = "sorry check the database "
     else:
         ans = str(db.session.query(studdata).get(index))
-    checkans.append(ans) ################################
     if ans == "None":
         ans = "there is some problem in answer"
 
@@ -93,7 +87,9 @@ def manage_query(req):
               "fulfillmentMessages": [
                 {
                   "text": {
-                    "text":  checkans
+                    "text":  [
+                          str(index)
+                    ]
                     
                   }
                 }
