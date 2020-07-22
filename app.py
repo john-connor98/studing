@@ -79,16 +79,17 @@ def manage_query(req):
     if index==None:
         ans = "sorry check the database "
     else:
-        ans = str(studdata.query.get(index+1))
+        ans = db.session.query(studdata).get(index+1)
     if ans == "None":
         ans = "there is some problem in answer"
-
+        
+    ans_quest = str(ans.Question)
     return {
               "fulfillmentMessages": [
                 {
                   "text": {
                     "text":  [
-                         ans
+                         ans_quest
                     ]
                     
                   }
