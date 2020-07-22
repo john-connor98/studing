@@ -34,7 +34,7 @@ class studdata(db.Model):
 # model = pickle.load(open('tfidf_model.pkl', 'rb'))
 model = TfidfVectorizer()
 quest_tuple_list = db.session.query(studdata.Question).all()
-quest_list = [value for value, in quest_tuple_list]
+quest_list = [str(value) for value, in quest_tuple_list]
 quest_dataframe = pd.DataFrame(quest_list)
 tfidf_features = model.fit_transform(quest_dataframe)
 
