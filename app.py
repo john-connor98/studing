@@ -77,7 +77,7 @@ def manage_query(req):
     query = process_query(original_query)
     checkans.append(query) ################################
     query_transformed = model.transform(query)
-    checkans.append(query_transformend) ################################
+    checkans.append(query_transformed) ################################
     pairwise_dist = pairwise_distances(tfidf_features, query_transformed)
     index = numpy.argsort(pairwise_dist.flatten())[0]
     checkans.append(index) ################################
