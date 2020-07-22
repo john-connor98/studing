@@ -46,7 +46,7 @@ quest_tuple_list = db.session.query(studdata.Question).all()
 quest_list = [str(value) for value, in quest_tuple_list]
 # subans = ' '.join(quest_list)
 quest_dataframe = pd.DataFrame(quest_list)
-tfidf_features = model.fit_transform(quest_dataframe.iloc[-1])
+tfidf_features = model.fit_transform(quest_dataframe.iloc[:,-1])
 
 
 @app.route('/webhook', methods=['POST'])
