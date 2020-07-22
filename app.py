@@ -83,7 +83,7 @@ def manage_query(req):
     if ans == "None":
         ans = "there is some problem in answer"
         
-    ans_quest = str(ans.Question)
+    ans_quest = str(ans.Answer)
     return {
               "fulfillmentMessages": [
                 {
